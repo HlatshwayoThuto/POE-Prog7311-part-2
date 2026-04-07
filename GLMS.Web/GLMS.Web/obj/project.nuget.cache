@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "b/J1FaIGL6s=",
+  "dgSpecHash": "Y8egThA7aBA=",
   "success": true,
   "projectFilePath": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\GLMS.Web.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\lab_services_student\\.nuget\\packages\\microsoft.entityframeworkcore\\10.0.5\\microsoft.entityframeworkcore.10.0.5.nupkg.sha512",
+    "C:\\Users\\lab_services_student\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\10.0.5\\microsoft.entityframeworkcore.abstractions.10.0.5.nupkg.sha512",
+    "C:\\Users\\lab_services_student\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\10.0.5\\microsoft.entityframeworkcore.analyzers.10.0.5.nupkg.sha512"
+  ],
   "logs": []
 }
