@@ -6,6 +6,23 @@
 // DEPENDENCY INJECTION: Instead of classes creating their own dependencies
 // with "new", ASP.NET Core creates and injects them automatically.
 // This makes the code loosely coupled and easily testable.
+// DESIGN PATTERNS IMPLEMENTED (From Part 1 Architecture Report):
+//
+// 1. FACTORY PATTERN   - Factories/ContractFactory.cs
+//    - IContractFactory creates Contract objects with correct initial status
+//    - Standard = Draft, Premium/Enterprise = Active
+//    - Used in ContractsController.Create()
+//
+// 2. REPOSITORY PATTERN - Repositories/IRepositories.cs + Repositories.cs
+//    - IClientRepository, IContractRepository, IServiceRequestRepository
+//    - Controllers NEVER access GlmsDbContext directly
+//    - Enables unit testing with mock repositories
+//
+// 3. OBSERVER PATTERN  - Observers/ContractObservers.cs
+//    - AuditLogObserver: logs every status change
+//    - EmailNotificationObserver: simulates email notifications
+//    - Triggered automatically in ContractService.UpdateStatusAsync()
+// ═══════════════════════════════════════════════════════════════════════════════
 
 using Microsoft.EntityFrameworkCore;
 using GLMS.Web.Data;
@@ -31,6 +48,7 @@ builder.Services.AddDbContext<GlmsDbContext>(options =>
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<IServiceRequestRepository, ServiceRequestRepository>();
+builder.Services.AddScoped<IWorkflowService, WorkflowService>();
 
 // ── Factory Pattern Registration ──────────────────────────────────────────────
 builder.Services.AddScoped<IContractFactory, ContractFactory>();
