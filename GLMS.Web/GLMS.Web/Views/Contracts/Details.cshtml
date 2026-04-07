@@ -1,0 +1,98 @@
+﻿@model GLMS.Web.Models.Contract
+@using GLMS.Web.Models
+@{
+    ViewData["Title"] = "Contract Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📄 @Model.Title</h2>
+    <a asp-action="Index" class="btn btn-secondary">← Back</a>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">Contract Information</div>
+            <div class="card-body">
+                <p><strong>Client:</strong> @Model.Client?.Name</p>
+                <p><strong>Start Date:</strong> @Model.StartDate.ToString("dd MMM yyyy")</p>
+                <p><strong>End Date:</strong> @Model.EndDate.ToString("dd MMM yyyy")</p>
+                <p><strong>Service Level:</strong> @Model.ServiceLevel</p>
+                <p><strong>Created On:</strong> @Model.CreatedOn.ToString("dd MMM yyyy HH:mm")</p>
+                <p>
+                    <strong>Status:</strong>
+                    <span class="badge @(Model.Status == ContractStatus.Active ? "bg-success" :
+                                                                   Model.Status == ContractStatus.Expired ? "bg-danger" :
+                                                                   Model.Status == ContractStatus.OnHold ? "bg-warning text-dark" : "bg-secondary")">
+                        @Model.Status
+                    </span>
+                </p>
+                @if (Model.SignedAgreementPath != null)
+                {
+                    <a asp-action="DownloadAgreement" asp-route-id="@Model.Id" class="btn btn-outline-info btn-sm">
+                        📥 Download Signed Agreement
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">Update Status</div>
+            <div class="card-body">
+                <form asp-action="UpdateStatus" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <select name="newStatus" class="form-select"
+                                asp-items="Html.GetEnumSelectList<ContractStatus>()"></select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>🔧 Service Requests</h4>
+        @if (Model.Status == ContractStatus.Active)
+        {
+            <a asp-controller="ServiceRequests" asp-action="Create"
+               asp-route-contractId="@Model.Id" class="btn btn-warning">+ New Request</a>
+        }
+    </div>
+    @if (!Model.ServiceRequests.Any())
+    {
+        <p class="text-muted">No service requests yet.</p>
+    }
+    else
+    {
+        <table class="table table-sm table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Description</th>
+                    <th>USD</th>
+                    <th>ZAR</th>
+                    <th>Rate Used</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sr in Model.ServiceRequests)
+                {
+                    <tr>
+                        <td>@sr.Description</td>
+                        <td>$@(sr.CostUsd.ToString("N2"))</td>
+                        <td>R@(sr.CostZar.ToString("N2"))</td>
+                        <td>@(sr.ExchangeRateUsed.ToString("F4"))</td>
+                        <td>@sr.Status</td>
+                        <td>@(sr.CreatedOn.ToString("dd MMM yyyy"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<GLMS.Web.Models.ServiceRequest>
+@{
+    ViewData["Title"] = "Service Requests";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>🔧 Service Requests</h2>
+    <a asp-action="Create" class="btn btn-warning">+ New Request</a>
+</div>
+
+<table class="table table-striped table-hover shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Contract</th>
+            <th>Client</th>
+            <th>Description</th>
+            <th>Cost (USD)</th>
+            <th>Cost (ZAR)</th>
+            <th>Rate Used</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sr in Model)
+        {
+            <tr>
+                <td>@sr.Contract?.Title</td>
+                <td>@sr.Contract?.Client?.Name</td>
+                <td>@sr.Description</td>
+                <td>$@(sr.CostUsd.ToString("N2"))</td>
+                <td>R@(sr.CostZar.ToString("N2"))</td>
+                <td>@(sr.ExchangeRateUsed.ToString("F4"))</td>
+                <td>@sr.Status</td>
+                <td>@(sr.CreatedOn.ToString("dd MMM yyyy"))</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,8 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="p-5 mb-4 bg-dark text-white rounded-3">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold">🚚 Global Logistics Management System</h1>
+        <p class="col-md-8 fs-4">Welcome to GLMS — TechMove Logistics' centralised platform for managing contracts, clients, and service requests.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card border-primary shadow-sm h-100">
+            <div class="card-body text-center">
+                <h1 class="display-4">👥</h1>
+                <h5 class="card-title">Clients</h5>
+                <p class="card-text">Manage client profiles, contact details, and regional information.</p>
+                <a asp-controller="Clients" asp-action="Index" class="btn btn-primary">View Clients</a>
+                <a asp-controller="Clients" asp-action="Create" class="btn btn-outline-primary ms-2">Add New</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-success shadow-sm h-100">
+            <div class="card-body text-center">
+                <h1 class="display-4">📄</h1>
+                <h5 class="card-title">Contracts</h5>
+                <p class="card-text">Create and manage legal agreements, SLAs, and signed documents.</p>
+                <a asp-controller="Contracts" asp-action="Index" class="btn btn-success">View Contracts</a>
+                <a asp-controller="Contracts" asp-action="Create" class="btn btn-outline-success ms-2">Add New</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-warning shadow-sm h-100">
+            <div class="card-body text-center">
+                <h1 class="display-4">🔧</h1>
+                <h5 class="card-title">Service Requests</h5>
+                <p class="card-text">Raise and track service requests linked to active contracts.</p>
+                <a asp-controller="ServiceRequests" asp-action="Index" class="btn btn-warning">View Requests</a>
+                <a asp-controller="ServiceRequests" asp-action="Create" class="btn btn-outline-warning ms-2">Add New</a>
+            </div>
+        </div>
+    </div>
 </div>
