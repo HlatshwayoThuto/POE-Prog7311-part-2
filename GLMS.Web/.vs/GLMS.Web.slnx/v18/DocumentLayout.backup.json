@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{56E79F5A-82FB-7736-7209-956FD67C3CCA}|GLMS.Web\\GLMS.Web.csproj|c:\\users\\lab_services_student\\desktop\\poe-prog7311-part-2\\glms.web\\glms.web\\observers\\contractobservers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{56E79F5A-82FB-7736-7209-956FD67C3CCA}|GLMS.Web\\GLMS.Web.csproj|solutionrelative:glms.web\\observers\\contractobservers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{56E79F5A-82FB-7736-7209-956FD67C3CCA}|GLMS.Web\\GLMS.Web.csproj|c:\\users\\lab_services_student\\desktop\\poe-prog7311-part-2\\glms.web\\glms.web\\factories\\contractfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{56E79F5A-82FB-7736-7209-956FD67C3CCA}|GLMS.Web\\GLMS.Web.csproj|solutionrelative:glms.web\\factories\\contractfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -43,19 +47,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ContractObservers.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Observers\\ContractObservers.cs",
+              "RelativeDocumentMoniker": "GLMS.Web\\Observers\\ContractObservers.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Observers\\ContractObservers.cs",
+              "RelativeToolTip": "GLMS.Web\\Observers\\ContractObservers.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAowEcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T14:08:11.86Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ContractFactory.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Factories\\ContractFactory.cs",
               "RelativeDocumentMoniker": "GLMS.Web\\Factories\\ContractFactory.cs",
               "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Factories\\ContractFactory.cs",
               "RelativeToolTip": "GLMS.Web\\Factories\\ContractFactory.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAADwvzcAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAB8AAAAAAAAAAADwvy8AAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-07T14:06:14.654Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Repositories.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Repositories\\Repositories.cs",
               "RelativeDocumentMoniker": "GLMS.Web\\Repositories\\Repositories.cs",
@@ -63,12 +80,11 @@
               "RelativeToolTip": "GLMS.Web\\Repositories\\Repositories.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAJoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-07T14:05:16.25Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-07T14:05:16.25Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "IRepositories.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Repositories\\IRepositories.cs",
               "RelativeDocumentMoniker": "GLMS.Web\\Repositories\\IRepositories.cs",
@@ -76,12 +92,11 @@
               "RelativeToolTip": "GLMS.Web\\Repositories\\IRepositories.cs",
               "ViewState": "AgIAABsAAAAAAAAAAAAgwC4AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-07T14:03:39.7Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-07T14:03:39.7Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "GlmsDbContext.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Data\\GlmsDbContext.cs",
               "RelativeDocumentMoniker": "GLMS.Web\\Data\\GlmsDbContext.cs",
@@ -93,7 +108,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ServiceRequest.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Models\\ServiceRequest.cs",
               "RelativeDocumentMoniker": "GLMS.Web\\Models\\ServiceRequest.cs",
@@ -105,7 +120,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Contract.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Models\\Contract.cs",
               "RelativeDocumentMoniker": "GLMS.Web\\Models\\Contract.cs",
@@ -117,7 +132,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Client.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\Models\\Client.cs",
               "RelativeDocumentMoniker": "GLMS.Web\\Models\\Client.cs",
