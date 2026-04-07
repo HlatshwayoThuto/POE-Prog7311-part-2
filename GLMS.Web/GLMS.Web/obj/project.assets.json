@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lab_services_student\\source\\repos\\GLMS.Web\\GLMS.Web\\GLMS.Web.csproj",
+      "projectUniqueName": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\GLMS.Web.csproj",
       "projectName": "GLMS.Web",
-      "projectPath": "C:\\Users\\lab_services_student\\source\\repos\\GLMS.Web\\GLMS.Web\\GLMS.Web.csproj",
+      "projectPath": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\GLMS.Web.csproj",
       "packagesPath": "C:\\Users\\lab_services_student\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lab_services_student\\source\\repos\\GLMS.Web\\GLMS.Web\\obj\\",
+      "outputPath": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
