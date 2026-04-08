@@ -150,3 +150,4 @@ C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Tests\ob
 C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Tests\obj\Debug\net10.0\GLMS.Tests.pdb
 C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Tests\obj\Debug\net10.0\GLMS.Tests.genruntimeconfig.cache
 C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Tests\obj\Debug\net10.0\ref\GLMS.Tests.dll
+C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Tests\bin\Debug\net10.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

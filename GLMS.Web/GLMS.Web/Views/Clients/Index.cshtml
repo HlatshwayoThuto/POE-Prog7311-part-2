@@ -5,7 +5,11 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>👥 Clients</h2>
-    <a asp-action="Create" class="btn btn-primary">+ Add Client</a>
+    @* Only Admin can add new clients *@
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-primary">+ Add Client</a>
+    }
 </div>
 
 <table class="table table-striped table-hover shadow-sm">
@@ -16,7 +20,11 @@
             <th>Phone</th>
             <th>Region</th>
             <th>Contracts</th>
-            <th>Actions</th>
+            @* Only show Actions column to Admin *@
+            @if (User.IsInRole("Admin"))
+            {
+                <th>Actions</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -28,10 +36,16 @@
                 <td>@client.ContactPhone</td>
                 <td>@client.Region</td>
                 <td>@client.Contracts.Count()</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@client.Id" class="btn btn-sm btn-outline-primary">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@client.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                </td>
+                @* Edit and Delete buttons only visible to Admin *@
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@client.Id"
+                           class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@client.Id"
+                           class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

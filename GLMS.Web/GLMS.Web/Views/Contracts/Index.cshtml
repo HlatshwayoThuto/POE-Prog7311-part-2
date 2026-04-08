@@ -6,33 +6,51 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>📄 Contracts</h2>
-    <a asp-action="Create" class="btn btn-success">+ New Contract</a>
+    @* Admin and Manager can create contracts *@
+    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+    {
+        <a asp-action="Create" class="btn btn-success">+ New Contract</a>
+    }
 </div>
 
-<form method="get" class="row g-3 mb-4 p-3 bg-light rounded shadow-sm">
-    <div class="col-md-3">
-        <label class="form-label">Start Date From</label>
-        <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control" />
+@* Search/Filter form — Admin only *@
+@if (User.IsInRole("Admin"))
+{
+    <form method="get" class="row g-3 mb-4 p-3 bg-light rounded shadow-sm">
+        <div class="col-md-3">
+            <label class="form-label">Start Date From</label>
+            <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">End Date To</label>
+            <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+                <option value="">All Statuses</option>
+                @foreach (var s in Enum.GetValues<ContractStatus>())
+                {
+                    <option value="@s"
+                            selected="@(ViewBag.Status?.ToString() == s.ToString())">
+                        @s
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+        </div>
+    </form>
+}
+else
+{
+    @* Manager and Viewer see all contracts without search *@
+    <div class="alert alert-info">
+        <small>🔒 Search and filter is available to Admins only.</small>
     </div>
-    <div class="col-md-3">
-        <label class="form-label">End Date To</label>
-        <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control" />
-    </div>
-    <div class="col-md-3">
-        <label class="form-label">Status</label>
-        <select name="status" class="form-select">
-            <option value="">All Statuses</option>
-            @foreach (var s in Enum.GetValues<ContractStatus>())
-            {
-                <option value="@s" selected="@(ViewBag.Status?.ToString() == s.ToString())">@s</option>
-            }
-        </select>
-    </div>
-    <div class="col-md-3 d-flex align-items-end gap-2">
-        <button type="submit" class="btn btn-primary">Search</button>
-        <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
-    </div>
-</form>
+}
 
 <table class="table table-striped table-hover shadow-sm">
     <thead class="table-dark">
@@ -57,8 +75,9 @@
                 <td>@c.EndDate.ToString("dd MMM yyyy")</td>
                 <td>
                     <span class="badge @(c.Status == ContractStatus.Active ? "bg-success" :
-                                                                   c.Status == ContractStatus.Expired ? "bg-danger" :
-                                                                   c.Status == ContractStatus.OnHold ? "bg-warning text-dark" : "bg-secondary")">
+                                                                                           c.Status == ContractStatus.Expired ? "bg-danger" :
+                                                                                           c.Status == ContractStatus.OnHold ? "bg-warning text-dark" :
+                                                                                           "bg-secondary")">
                         @c.Status
                     </span>
                 </td>
@@ -66,7 +85,8 @@
                 <td>
                     @if (c.SignedAgreementPath != null)
                     {
-                        <a asp-action="DownloadAgreement" asp-route-id="@c.Id" class="btn btn-sm btn-outline-info">📥 Download</a>
+                        <a asp-action="DownloadAgreement" asp-route-id="@c.Id"
+                           class="btn btn-sm btn-outline-info">📥 Download</a>
                     }
                     else
                     {
@@ -74,7 +94,8 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-outline-primary">Details</a>
+                    <a asp-action="Details" asp-route-id="@c.Id"
+                       class="btn btn-sm btn-outline-primary">Details</a>
                 </td>
             </tr>
         }

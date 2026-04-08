@@ -3,26 +3,38 @@
     ViewData["Title"] = "Delete Client";
 }
 
-<h2>👥 Delete Client</h2>
-<hr />
-
-<div class="alert alert-danger">
-    <strong>Are you sure you want to delete this client?</strong>
-</div>
-
-<div class="card shadow-sm col-md-5">
-    <div class="card-body">
-        <p><strong>Name:</strong> @Model.Name</p>
-        <p><strong>Email:</strong> @Model.ContactEmail</p>
-        <p><strong>Phone:</strong> @Model.ContactPhone</p>
-        <p><strong>Region:</strong> @Model.Region</p>
+@* Extra safety check *@
+@if (!User.IsInRole("Admin"))
+{
+    <div class="alert alert-danger">
+        You do not have permission to delete clients.
     </div>
-</div>
+}
+else
+{
+    <h2>👥 Delete Client</h2>
+    <hr />
 
-<div class="mt-4">
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger">Yes, Delete</button>
-        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
-    </form>
-</div>
+    <div class="alert alert-danger">
+        <strong>Are you sure you want to delete this client?</strong>
+        <br />
+        <small>This action cannot be undone. Note: clients with existing contracts cannot be deleted.</small>
+    </div>
+
+    <div class="card shadow-sm col-md-5">
+        <div class="card-body">
+            <p><strong>Name:</strong> @Model.Name</p>
+            <p><strong>Email:</strong> @Model.ContactEmail</p>
+            <p><strong>Phone:</strong> @Model.ContactPhone</p>
+            <p><strong>Region:</strong> @Model.Region</p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+}

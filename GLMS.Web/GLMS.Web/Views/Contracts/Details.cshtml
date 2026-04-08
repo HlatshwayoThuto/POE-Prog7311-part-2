@@ -22,14 +22,16 @@
                 <p>
                     <strong>Status:</strong>
                     <span class="badge @(Model.Status == ContractStatus.Active ? "bg-success" :
-                                                                   Model.Status == ContractStatus.Expired ? "bg-danger" :
-                                                                   Model.Status == ContractStatus.OnHold ? "bg-warning text-dark" : "bg-secondary")">
+                                                                                           Model.Status == ContractStatus.Expired ? "bg-danger" :
+                                                                                           Model.Status == ContractStatus.OnHold ? "bg-warning text-dark" :
+                                                                                           "bg-secondary")">
                         @Model.Status
                     </span>
                 </p>
                 @if (Model.SignedAgreementPath != null)
                 {
-                    <a asp-action="DownloadAgreement" asp-route-id="@Model.Id" class="btn btn-outline-info btn-sm">
+                    <a asp-action="DownloadAgreement" asp-route-id="@Model.Id"
+                           class="btn btn-outline-info btn-sm">
                         📥 Download Signed Agreement
                     </a>
                 }
@@ -37,32 +39,45 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white">Update Status</div>
-            <div class="card-body">
-                <form asp-action="UpdateStatus" method="post">
-                    <input type="hidden" name="id" value="@Model.Id" />
-                    <div class="mb-3">
-                        <select name="newStatus" class="form-select"
-                                asp-items="Html.GetEnumSelectList<ContractStatus>()"></select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update Status</button>
-                </form>
+    @* Update Status card — Admin only *@
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">Update Status</div>
+                <div class="card-body">
+                    <p class="text-muted small">
+                        Changing status will trigger audit log and email notifications.
+                    </p>
+                    <form asp-action="UpdateStatus" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="mb-3">
+                            <select name="newStatus" class="form-select"
+                                    asp-items="Html.GetEnumSelectList<ContractStatus>()">
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Status</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    }
 </div>
 
 <div class="mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4>🔧 Service Requests</h4>
-        @if (Model.Status == ContractStatus.Active)
+        @* Only Admin and Manager can raise new requests, and only on Active contracts *@
+        @if (Model.Status == ContractStatus.Active &&
+                     (User.IsInRole("Admin") || User.IsInRole("Manager")))
         {
             <a asp-controller="ServiceRequests" asp-action="Create"
-               asp-route-contractId="@Model.Id" class="btn btn-warning">+ New Request</a>
+                   asp-route-contractId="@Model.Id" class="btn btn-warning">
+                + New Request
+            </a>
         }
     </div>
+
     @if (!Model.ServiceRequests.Any())
     {
         <p class="text-muted">No service requests yet.</p>

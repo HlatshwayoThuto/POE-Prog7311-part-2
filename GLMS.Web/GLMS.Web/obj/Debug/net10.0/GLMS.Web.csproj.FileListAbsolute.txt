@@ -224,3 +224,4 @@ C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Web\obj\
 C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Web\obj\Debug\net10.0\GLMS.Web.pdb
 C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Web\obj\Debug\net10.0\GLMS.Web.genruntimeconfig.cache
 C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Web\obj\Debug\net10.0\ref\GLMS.Web.dll
+C:\Users\lab_services_student\Desktop\POE-Prog7311-part-2\GLMS.Web\GLMS.Web\bin\Debug\net10.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

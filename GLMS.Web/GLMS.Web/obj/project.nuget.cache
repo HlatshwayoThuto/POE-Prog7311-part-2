@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "p8TpHOLjsvo=",
+  "dgSpecHash": "iMsk0jikTBg=",
   "success": true,
   "projectFilePath": "C:\\Users\\lab_services_student\\Desktop\\POE-Prog7311-part-2\\GLMS.Web\\GLMS.Web\\GLMS.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lab_services_student\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\lab_services_student\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
     "C:\\Users\\lab_services_student\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\lab_services_student\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\10.0.5\\microsoft.aspnetcore.identity.entityframeworkcore.10.0.5.nupkg.sha512",
     "C:\\Users\\lab_services_student\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\8.0.0\\microsoft.bcl.asyncinterfaces.8.0.0.nupkg.sha512",
     "C:\\Users\\lab_services_student\\.nuget\\packages\\microsoft.bcl.cryptography\\9.0.4\\microsoft.bcl.cryptography.9.0.4.nupkg.sha512",
     "C:\\Users\\lab_services_student\\.nuget\\packages\\microsoft.build.framework\\18.0.2\\microsoft.build.framework.18.0.2.nupkg.sha512",
