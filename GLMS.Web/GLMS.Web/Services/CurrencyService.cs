@@ -1,4 +1,4 @@
-﻿// ─── CURRENCY SERVICE ─────────────────────────────────────────────────────────
+﻿// CURRENCY SERVICE 
 // Handles all currency conversion logic for the GLMS system.
 // TechMove operates internationally but reports costs in ZAR (South African Rand).
 //
@@ -20,7 +20,7 @@ namespace GLMS.Web.Services
 {
     public interface ICurrencyService
     {
-        // Async method — fetches live rate from external API
+        // Async method will fetch the live rate from external API
         Task<decimal> GetUsdToZarRateAsync();
 
         // Pure calculation method — no external dependencies, fully unit testable
@@ -32,7 +32,7 @@ namespace GLMS.Web.Services
         private readonly HttpClient _httpClient;
         private readonly ILogger<CurrencyService> _logger;
 
-        // Free currency API — no API key required
+        // Free currency API — no API key required because this is a free One.
         private const string ApiUrl = "https://open.er-api.com/v6/latest/USD";
 
         // HttpClient is injected via DI — registered as AddHttpClient in Program.cs
@@ -46,7 +46,7 @@ namespace GLMS.Web.Services
         {
             try
             {
-                // Async HTTP call — does not block the thread while waiting
+                // Async HTTP call doesnt block the thread while waiting
                 var response = await _httpClient.GetStringAsync(ApiUrl);
 
                 // Parse JSON response using System.Text.Json
@@ -69,12 +69,12 @@ namespace GLMS.Web.Services
         }
 
         /// <summary>
-        /// Converts a USD amount to ZAR using the provided exchange rate.
+        /// Converts a USD amount to ZAR using the given exchange rate.
         /// This method is intentionally kept pure (no side effects) for unit testing.
         /// </summary>
         public decimal ConvertUsdToZar(decimal usdAmount, decimal rate)
         {
-            // Validate the rate — a zero or negative rate would produce nonsensical results
+            // Validate the rate — a zero or negative rate would give me a wong/rediculous answer
             if (rate <= 0)
                 throw new ArgumentException("Exchange rate must be greater than zero.", nameof(rate));
 

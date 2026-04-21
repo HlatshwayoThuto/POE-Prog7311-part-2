@@ -1,4 +1,4 @@
-﻿// ─── DATABASE CONTEXT 
+﻿// DATABASE CONTEXT 
 // GlmsDbContext inherits from IdentityDbContext instead of DbContext.
 // This automatically adds all ASP.NET Core Identity tables to the database:
 // AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserClaims etc.
@@ -28,7 +28,7 @@ namespace GLMS.Web.Data
             // MUST call base first — Identity needs this to set up its own tables
             base.OnModelCreating(modelBuilder);
 
-            // ── Relationship: Client → Contracts (One-to-Many) ────────────────
+            //  Relationship: Client → Contracts (One-to-Many) 
             // One Client can have many Contracts
             // DeleteBehavior.Restrict prevents deleting a Client that has Contracts
             modelBuilder.Entity<Contract>()
@@ -37,7 +37,7 @@ namespace GLMS.Web.Data
                 .HasForeignKey(c => c.ClientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // ── Relationship: Contract → ServiceRequests (One-to-Many) ────────
+            // ── Relationship: Contract → ServiceRequests (One-to-Many) 
             // One Contract can have many ServiceRequests
             // DeleteBehavior.Cascade automatically deletes ServiceRequests
             // when their parent Contract is deleted
@@ -47,7 +47,7 @@ namespace GLMS.Web.Data
                 .HasForeignKey(sr => sr.ContractId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // ── Decimal precision configuration ───────────────────────────────
+            // ── Decimal precision configuration 
             modelBuilder.Entity<ServiceRequest>()
                 .Property(sr => sr.CostUsd).HasPrecision(18, 2);
             modelBuilder.Entity<ServiceRequest>()
@@ -55,7 +55,7 @@ namespace GLMS.Web.Data
             modelBuilder.Entity<ServiceRequest>()
                 .Property(sr => sr.ExchangeRateUsed).HasPrecision(18, 6);
 
-            // ── Seed Data ─────────────────────────────────────────────────────
+            // ── Seed Data 
             modelBuilder.Entity<Client>().HasData(
                 new Client { Id = 1, Name = "Global Freight SA", ContactEmail = "ops@globalfreight.co.za", ContactPhone = "+27115551234", Region = "Southern Africa" },
                 new Client { Id = 2, Name = "Transatlantic Cargo Ltd", ContactEmail = "info@tac.com", ContactPhone = "+12125557890", Region = "North America" }

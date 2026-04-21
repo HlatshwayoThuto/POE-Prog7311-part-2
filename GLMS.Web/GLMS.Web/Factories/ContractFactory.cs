@@ -1,4 +1,4 @@
-﻿// ─── FACTORY PATTERN ──────────────────────────────────────────────────────────
+﻿// FACTORY PATTERN 
 // The Factory Pattern (Gang of Four — Creational Pattern) is used here to
 // centralise the creation of Contract objects.
 //
@@ -42,7 +42,7 @@ namespace GLMS.Web.Factories
                 ServiceLevel = serviceLevel,
                 CreatedOn = DateTime.UtcNow,
 
-                // ── Factory Business Rule ─────────────────────────────────────
+                // ── Factory Business Rule 
                 // Standard contracts start as Draft and need manual approval.
                 // Premium and Enterprise contracts are pre-approved and start Active.
                 Status = serviceLevel == ServiceLevel.Standard

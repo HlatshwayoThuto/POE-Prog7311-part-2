@@ -1,4 +1,4 @@
-﻿// ─── SERVICE REQUESTS CONTROLLER 
+﻿// SERVICE REQUESTS CONTROLLER 
 // Manages all operations for Service Requests in the GLMS system.
 //
 // WHAT IS A SERVICE REQUEST?
@@ -61,7 +61,7 @@ namespace GLMS.Web.Controllers
             _workflowService = workflowService;
         }
 
-        // ── INDEX — View All Service Requests 
+        // INDEX — View All Service Requests 
         // GET: /ServiceRequests
         //
         // All three roles can see service requests
@@ -74,7 +74,7 @@ namespace GLMS.Web.Controllers
             return View(await _repo.GetAllAsync());
         }
 
-        // ── CREATE (GET) — Show the Create Form 
+        // CREATE (GET) — Show the Create Form 
         // GET: /ServiceRequests/Create or /ServiceRequests/Create?contractId=5
         //
         // The optional contractId parameter pre-selects a contract in the dropdown
@@ -97,7 +97,7 @@ namespace GLMS.Web.Controllers
             return View(new ServiceRequest { ContractId = contractId ?? 0 });
         }
 
-        // ── CREATE (POST) — Save the New Service Request 
+        // CREATE (POST) — Save the New Service Request 
         // POST: /ServiceRequests/Create
         //
         // This action has two key responsibilities:
@@ -142,7 +142,7 @@ namespace GLMS.Web.Controllers
                 return View(model);
             }
 
-            // ── STEP 2: CURRENCY CONVERSION 
+            // STEP 2: CURRENCY CONVERSION 
             // Fetch the live exchange rate from the external API (open.er-api.com)
             // This is an async call — the thread is not blocked while waiting
             var exchangeRate = await _currencyService.GetUsdToZarRateAsync();
@@ -164,7 +164,7 @@ namespace GLMS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ── GET RATE — Live Exchange Rate Endpoint 
+        // GET RATE — Live Exchange Rate Endpoint 
         // GET: /ServiceRequests/GetRate
         //
         // Returns the current USD→ZAR rate as JSON
@@ -181,7 +181,7 @@ namespace GLMS.Web.Controllers
             return Json(new { rate });
         }
 
-        // ── PRIVATE HELPER — Populate Contracts Dropdown 
+        // PRIVATE HELPER — Populate Contracts Dropdown 
         // Fetches only ACTIVE contracts for the dropdown
         // This is a UI guard — the workflow validation also runs server-side
         // but filtering the dropdown prevents users from even selecting

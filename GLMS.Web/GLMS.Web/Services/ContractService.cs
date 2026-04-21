@@ -1,4 +1,4 @@
-﻿// ─── CONTRACT SERVICE ─────────────────────────────────────────────────────────
+﻿// CONTRACT SERVICE 
 // The ContractService sits between the Controllers and the Repository.
 // It handles business logic that goes beyond simple data access.
 //
@@ -37,7 +37,7 @@ namespace GLMS.Web.Services
         // IContractRepository injected — ContractService never touches DbContext directly
         public ContractService(IContractRepository repo) => _repo = repo;
 
-        // ── Observer Pattern: Registration ────────────────────────────────────
+        // Observer Pattern: Registration 
         // Observers register themselves here — called in Program.cs during setup
         public void RegisterObserver(IContractObserver observer) => _observers.Add(observer);
 
@@ -49,7 +49,7 @@ namespace GLMS.Web.Services
                 await observer.OnStatusChangedAsync(contract, oldStatus, newStatus);
         }
 
-        // ── Standard CRUD via Repository ──────────────────────────────────────
+        // Standard CRUD via Repository
         public Task<IEnumerable<Contract>> GetAllAsync() => _repo.GetAllAsync();
         public Task<Contract?> GetByIdAsync(int id) => _repo.GetByIdAsync(id);
         public Task<IEnumerable<Contract>> SearchAsync(DateTime? s, DateTime? e, ContractStatus? st) =>
@@ -57,7 +57,7 @@ namespace GLMS.Web.Services
         public Task CreateAsync(Contract contract) => _repo.AddAsync(contract);
         public Task DeleteAsync(int id) => _repo.DeleteAsync(id);
 
-        // ── Status Update with Observer Notification ──────────────────────────
+        // Status Update with Observer Notification 
         // This is the key method — it updates the status AND notifies all observers
         public async Task UpdateStatusAsync(int contractId, ContractStatus newStatus)
         {

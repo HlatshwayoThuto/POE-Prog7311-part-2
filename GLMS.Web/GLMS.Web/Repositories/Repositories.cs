@@ -1,4 +1,4 @@
-﻿// ─── REPOSITORY IMPLEMENTATIONS ──────────────────────────────────────────────
+﻿// REPOSITORY IMPLEMENTATIONS 
 // Concrete implementations of the repository interfaces.
 // These are the ONLY classes that interact with GlmsDbContext directly.
 // Controllers and Services never touch the DbContext — they only use these repos.
@@ -12,7 +12,7 @@ using GLMS.Web.Models;
 
 namespace GLMS.Web.Repositories
 {
-    // ── Client Repository ─────────────────────────────────────────────────────
+    // Client Repository 
     public class ClientRepository : IClientRepository
     {
         private readonly GlmsDbContext _db;
@@ -53,7 +53,7 @@ namespace GLMS.Web.Repositories
         }
     }
 
-    // ── Contract Repository ───────────────────────────────────────────────────
+    // Contract Repository 
     public class ContractRepository : IContractRepository
     {
         private readonly GlmsDbContext _db;
@@ -72,7 +72,7 @@ namespace GLMS.Web.Repositories
                 .Include(c => c.ServiceRequests)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-        // ── LINQ Search/Filter ────────────────────────────────────────────────
+        // LINQ Search/Filter 
         // Satisfies rubric requirement: "Search/Filter using LINQ by Date Range and Status"
         // AsQueryable() builds the query lazily — filters are added conditionally
         // The query only executes when ToListAsync() is called at the end
@@ -111,7 +111,7 @@ namespace GLMS.Web.Repositories
         }
     }
 
-    // ── Service Request Repository ────────────────────────────────────────────
+    // Service Request Repository 
     public class ServiceRequestRepository : IServiceRequestRepository
     {
         private readonly GlmsDbContext _db;

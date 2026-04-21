@@ -1,4 +1,4 @@
-﻿// ─── ROLE SEEDER 
+﻿//  ROLE SEEDER 
 // Automatically creates the Admin, Manager and Viewer roles in the database
 // on startup. Also creates default accounts for each role so you can
 // log in and test immediately.
@@ -24,7 +24,7 @@ namespace GLMS.Web.Data
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            // ── Create Roles if they don't exist ──────────────────────────────
+            // Create Roles if they don't exist 
             string[] roles = { "Admin", "Manager", "Viewer" };
             foreach (var role in roles)
             {
@@ -32,15 +32,15 @@ namespace GLMS.Web.Data
                     await roleManager.CreateAsync(new IdentityRole(role));
             }
 
-            // ── Default Admin account ─────────────────────────────────────────
+            // Default Admin account 
             await CreateUserAsync(userManager,
                 "admin@glms.com", "Admin123", "Admin");
 
-            // ── Default Manager account ───────────────────────────────────────
+            // Default Manager account 
             await CreateUserAsync(userManager,
                 "manager@glms.com", "Manager123", "Manager");
 
-            // ── Default Viewer account ────────────────────────────────────────
+            // Default Viewer account 
             await CreateUserAsync(userManager,
                 "viewer@glms.com", "Viewer123", "Viewer");
         }

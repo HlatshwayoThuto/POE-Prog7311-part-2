@@ -1,4 +1,4 @@
-﻿// ─── CLIENT MODEL ─────────────────────────────────────────────────────────────
+﻿// CLIENT MODEL 
 // Represents a TechMove client (shipping company or individual).
 // This is the top-level entity — Clients own Contracts.
 

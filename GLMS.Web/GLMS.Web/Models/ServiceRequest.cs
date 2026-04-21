@@ -1,4 +1,4 @@
-﻿// ─── SERVICE REQUEST MODEL ────────────────────────────────────────────────────
+﻿//  SERVICE REQUEST MODEL 
 // Represents a logistics service request raised against an active contract.
 // WORKFLOW RULE: Cannot be created if the parent Contract is Expired or OnHold.
 // CURRENCY: Cost is entered in USD and automatically converted to ZAR via API.

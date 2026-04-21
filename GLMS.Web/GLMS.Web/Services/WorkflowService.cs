@@ -1,4 +1,4 @@
-﻿// ─── WORKFLOW SERVICE ─────────────────────────────────────────────────────────
+﻿// WORKFLOW SERVICE 
 // Centralises all business workflow rules for the GLMS system.
 // Separating this from Controllers satisfies the rubric requirement:
 // "Validation logic is separated from Controllers"

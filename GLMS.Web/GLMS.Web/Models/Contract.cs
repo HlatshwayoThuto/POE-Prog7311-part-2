@@ -1,4 +1,4 @@
-﻿// ─── CONTRACT MODEL ───────────────────────────────────────────────────────────
+﻿//  CONTRACT MODEL 
 // Represents a legal agreement between TechMove and a Client.
 // Contracts are the central entity — they link Clients to ServiceRequests.
 // The Factory Pattern (ContractFactory.cs) is responsible for creating these objects.

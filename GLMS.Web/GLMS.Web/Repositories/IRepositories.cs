@@ -1,4 +1,4 @@
-﻿// ─── REPOSITORY INTERFACES ────────────────────────────────────────────────────
+﻿// REPOSITORY INTERFACES 
 // Part of the Repository Pattern (one of the 3 design patterns from Part 1).
 //
 // WHY INTERFACES?

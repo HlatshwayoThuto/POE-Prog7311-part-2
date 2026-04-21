@@ -1,4 +1,4 @@
-﻿// ─── OBSERVER PATTERN ─────────────────────────────────────────────────────────
+﻿//  OBSERVER PATTERN 
 // The Observer Pattern (Gang of Four — Behavioural Pattern) is used here to
 // automatically notify interested parties when a Contract's status changes.
 //
@@ -33,7 +33,7 @@ namespace GLMS.Web.Observers
         Task NotifyObserversAsync(Contract contract, ContractStatus oldStatus, ContractStatus newStatus);
     }
 
-    // ── Observer 1: Audit Log ─────────────────────────────────────────────────
+    //  Observer 1: Audit Log 
     // Records every status change to the application log
     // In production this would write to a database audit table
     public class AuditLogObserver : IContractObserver
@@ -52,7 +52,7 @@ namespace GLMS.Web.Observers
         }
     }
 
-    // ── Observer 2: Email Notification ───────────────────────────────────────
+    // Observer 2: Email Notification 
     // Simulates sending an email when a contract status changes
     // In production this would use SMTP, SendGrid, or similar
     public class EmailNotificationObserver : IContractObserver

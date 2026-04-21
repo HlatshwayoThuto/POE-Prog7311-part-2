@@ -1,4 +1,4 @@
-﻿// ─── CONTRACTS CONTROLLER 
+﻿// CONTRACTS CONTROLLER 
 // Manages all operations for Contracts in the GLMS system.
 //
 // WHAT IS A CONTRACT?
@@ -63,7 +63,7 @@ namespace GLMS.Web.Controllers
             _fileService = fileService;
         }
 
-        // ── INDEX — Search and Filter Contracts 
+        // INDEX — Search and Filter Contracts 
         // GET: /Contracts or /Contracts?startDate=2026-01-01&status=Active
         //
         // ADMIN ONLY — this is the key requirement from the assignment brief:
@@ -89,7 +89,7 @@ namespace GLMS.Web.Controllers
             return View(contracts);
         }
 
-        // ── DETAILS — View a Single Contract 
+        // DETAILS — View a Single Contract 
         // GET: /Contracts/Details/5
         //
         // All roles can view contract details
@@ -119,7 +119,7 @@ namespace GLMS.Web.Controllers
             return View();
         }
 
-        // ── CREATE (POST) — Save the New Contract 
+        // CREATE (POST) — Save the New Contract 
         // POST: /Contracts/Create
         // enctype="multipart/form-data" in the view allows file uploads
         [HttpPost, ValidateAntiForgeryToken]
@@ -133,7 +133,7 @@ namespace GLMS.Web.Controllers
                 return View(vm);
             }
 
-            // ── Factory Pattern 
+            // Factory Pattern 
             // Instead of "new Contract { ... }" we use the Factory
             // The Factory applies business rules:
             // - Standard ServiceLevel → Status starts as Draft
@@ -173,14 +173,13 @@ namespace GLMS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ── UPDATE STATUS — Change a Contract's Status 
+        // UPDATE STATUS — Change a Contract's Status 
         // POST: /Contracts/UpdateStatus
         //
         // ADMIN ONLY — only Admins can change contract statuses
         //
-        // This is the key action that triggers the Observer Pattern:
-        // UpdateStatusAsync() in ContractService saves the new status AND
-        // automatically notifies all registered observers:
+        // This is the main action that triggers the Observer Pattern:
+        // UpdateStatusAsync() in ContractService saves the new status AND automatically notifies all registered observers:
         // 1. AuditLogObserver — logs the change
         // 2. EmailNotificationObserver — simulates sending an email
         [HttpPost, ValidateAntiForgeryToken]
@@ -206,9 +205,7 @@ namespace GLMS.Web.Controllers
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        // ── DOWNLOAD AGREEMENT — Stream PDF to Browser 
-        // GET: /Contracts/DownloadAgreement/5
-        //
+        // DOWNLOAD AGREEMENT — Stream PDF to Browser 
         // All roles can download signed agreements
         // Reads the file from the server disk and streams it to the browser
         // The browser will prompt the user to open or save the PDF
@@ -236,10 +233,8 @@ namespace GLMS.Web.Controllers
                 contract.SignedAgreementOriginalName ?? "agreement.pdf");
         }
 
-        // ── PRIVATE HELPER — Populate Clients Dropdown 
-        // Used by Create() to populate the Client selection dropdown
+        // PRIVATE HELPER — Populate Clients Dropdown 
         // Fetches all clients from the database and converts them to a SelectList
-        // SelectList is the ASP.NET MVC format for dropdown options
         private async Task PopulateClientsDropDown(int? selectedId = null)
         {
             var clients = await _clientRepo.GetAllAsync();
