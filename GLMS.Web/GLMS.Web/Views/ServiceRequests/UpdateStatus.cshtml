@@ -1,0 +1,73 @@
+﻿@model GLMS.Web.Models.ServiceRequest
+@using GLMS.Web.Models
+@{
+    ViewData["Title"] = "Update Service Request Status";
+}
+
+<h2>🔧 Update Service Request Status</h2>
+<hr />
+
+@* Safety check — only Admin should reach this page *@
+@if (!User.IsInRole("Admin"))
+{
+    <div class="alert alert-danger">
+        You do not have permission to update service request status.
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-6">
+
+            @* Show current request details *@
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    Current Request Details
+                </div>
+                <div class="card-body">
+                    <p><strong>Contract:</strong> @Model.Contract?.Title</p>
+                    <p><strong>Client:</strong> @Model.Contract?.Client?.Name</p>
+                    <p><strong>Description:</strong> @Model.Description</p>
+                    <p>
+                        <strong>Current Status:</strong>
+                        <span class="badge @(Model.Status == ServiceRequestStatus.Completed ? "bg-success" :
+                                                                                                       Model.Status == ServiceRequestStatus.Cancelled ? "bg-danger" :
+                                                                                                       Model.Status == ServiceRequestStatus.InProgress ? "bg-primary" :
+                                                                                                       "bg-warning text-dark")">
+                            @Model.Status
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            @* Status update form *@
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    Select New Status
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateStatusConfirmed" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">New Status</label>
+                            <select name="newStatus" class="form-select"
+                                    asp-items="Html.GetEnumSelectList<ServiceRequestStatus>()">
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                ✅ Save New Status
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

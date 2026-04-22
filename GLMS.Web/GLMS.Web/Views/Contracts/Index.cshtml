@@ -96,6 +96,12 @@ else
                 <td>
                     <a asp-action="Details" asp-route-id="@c.Id"
                        class="btn btn-sm btn-outline-primary">Details</a>
+                    @* Only Admin can delete contracts *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@c.Id"
+                           class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                    }
                 </td>
             </tr>
         }

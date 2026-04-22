@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<GLMS.Web.Models.ServiceRequest>
+@using GLMS.Web.Models
 @{
     ViewData["Title"] = "Service Requests";
 }
@@ -12,11 +13,14 @@
     }
 </div>
 
-@* Show a notice to Viewers that they have read-only access *@
+@* Show a read only notice to Viewers *@
 @if (User.IsInRole("Viewer"))
 {
     <div class="alert alert-info">
-        <small>🔒 You have read-only access. Contact a Manager or Admin to raise service requests.</small>
+        <small>
+            🔒 You have read-only access.
+            Contact a Manager or Admin to raise service requests.
+        </small>
     </div>
 }
 
@@ -31,6 +35,7 @@
             <th>Rate Used</th>
             <th>Status</th>
             <th>Date</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -43,8 +48,30 @@
                 <td>$@(sr.CostUsd.ToString("N2"))</td>
                 <td>R@(sr.CostZar.ToString("N2"))</td>
                 <td>@(sr.ExchangeRateUsed.ToString("F4"))</td>
-                <td>@sr.Status</td>
+                <td>
+                    @* Colour coded status badge *@
+                    <span class="badge @(sr.Status == ServiceRequestStatus.Completed ? "bg-success" :
+                                                                                           sr.Status == ServiceRequestStatus.Cancelled ? "bg-danger" :
+                                                                                           sr.Status == ServiceRequestStatus.InProgress ? "bg-primary" :
+                                                                                           "bg-warning text-dark")">
+                        @sr.Status
+                    </span>
+                </td>
                 <td>@(sr.CreatedOn.ToString("dd MMM yyyy"))</td>
+                <td>
+                    @* All roles can view details *@
+                    <a asp-action="Details" asp-route-id="@sr.Id"
+                       class="btn btn-sm btn-outline-primary">Details</a>
+
+                    @* Only Admin can update the status *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="UpdateStatus" asp-route-id="@sr.Id"
+                               class="btn btn-sm btn-outline-secondary ms-1">
+                            Update Status
+                        </a>
+                    }
+                </td>
             </tr>
         }
     </tbody>

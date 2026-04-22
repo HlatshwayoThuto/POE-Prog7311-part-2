@@ -2,101 +2,337 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="p-5 mb-4 bg-dark text-white rounded-3">
+@* ── HERO SECTION ──────────────────────────────────────────────────────────── *@
+<div class="p-5 mb-4 rounded-3 text-white"
+     style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
     <div class="container-fluid py-3">
-        <h1 class="display-5 fw-bold">🚚 Global Logistics Management System</h1>
-        <p class="col-md-8 fs-4">
-            Welcome to GLMS — TechMove Logistics' centralised platform for managing
-            contracts, clients, and service requests.
-        </p>
-        @if (User.Identity!.IsAuthenticated)
-        {
-            <p class="mb-0">
-                Logged in as
-                <strong>@User.Identity.Name</strong>
-                @if (User.IsInRole("Admin"))
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold mb-3">
+                    🚚 Global Logistics Management System
+                </h1>
+                <p class="fs-5 mb-3 text-white-50">
+                    TechMove Logistics' centralised platform for managing
+                    international contracts, clients, and service requests.
+                </p>
+                @if (User.Identity!.IsAuthenticated)
                 {
-                    <span class="badge bg-danger ms-1">Admin</span>
-                }
-                else if (User.IsInRole("Manager"))
-                {
-                    <span class="badge bg-primary ms-1">Manager</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-white-50">Logged in as</span>
+                        <strong class="text-white">@User.Identity.Name</strong>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <span class="badge bg-danger px-3 py-2">
+                                🔑 Admin
+                            </span>
+                        }
+                        else if (User.IsInRole("Manager"))
+                        {
+                            <span class="badge bg-primary px-3 py-2">
+                                📋 Manager
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary px-3 py-2">
+                                👁️ Viewer
+                            </span>
+                        }
+                    </div>
                 }
                 else
                 {
-                    <span class="badge bg-secondary ms-1">Viewer</span>
+                    <div class="mt-3">
+                        <a asp-area="Identity" asp-page="/Account/Login"
+                               class="btn btn-light btn-lg me-2">
+                            🔐 Login
+                        </a>
+                        <a asp-area="Identity" asp-page="/Account/Register"
+                               class="btn btn-outline-light btn-lg">
+                            📝 Register
+                        </a>
+                    </div>
                 }
-            </p>
-        }
-        else
-        {
-            <a asp-area="Identity" asp-page="/Account/Login"
-               class="btn btn-light btn-lg mt-2">Login to Get Started</a>
-        }
+            </div>
+            <div class="col-md-4 text-center d-none d-md-block">
+                <div style="font-size: 8rem; opacity: 0.3;">🌍</div>
+            </div>
+        </div>
     </div>
 </div>
 
 @if (User.Identity!.IsAuthenticated)
 {
-    <div class="row g-4">
+    @* ── ROLE ACCESS BANNER ──────────────────────────────────────────────────── *@
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert">
+            <strong>🔑 Admin Access:</strong>
+            You have full access to all features including search/filter,
+            status management, and user administration.
+        </div>
+    }
+    else if (User.IsInRole("Manager"))
+    {
+        <div class="alert alert-primary border-0 shadow-sm mb-4" role="alert">
+            <strong>📋 Manager Access:</strong>
+            You can create contracts and raise service requests.
+            Contact an Admin for search/filter access.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-secondary border-0 shadow-sm mb-4" role="alert">
+            <strong>👁️ Viewer Access:</strong>
+            You have read-only access. Contact a Manager or Admin to make changes.
+        </div>
+    }
+
+    @* ── MAIN FEATURE CARDS ──────────────────────────────────────────────────── *@
+    <div class="row g-4 mb-4">
+
+        @* CLIENTS CARD *@
         <div class="col-md-4">
-            <div class="card border-primary shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h1 class="display-4">👥</h1>
-                    <h5 class="card-title">Clients</h5>
-                    <p class="card-text">
-                        Manage client profiles, contact details, and regional information.
+            <div class="card h-100 shadow border-0"
+                 style="border-top: 4px solid #0d6efd !important;">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3"
+                         style="font-size: 3.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+                        👥
+                    </div>
+                    <h5 class="card-title fw-bold">Clients</h5>
+                    <p class="card-text text-muted small">
+                        Manage client profiles, contact details,
+                        and regional information for TechMove's global partners.
                     </p>
-                    <a asp-controller="Clients" asp-action="Index"
-                       class="btn btn-primary">View Clients</a>
-                    @* Only Admin can add clients *@
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a asp-controller="Clients" asp-action="Create"
-                           class="btn btn-outline-primary ms-2">Add New</a>
-                    }
+                    <div class="d-grid gap-2 mt-3">
+                        <a asp-controller="Clients" asp-action="Index"
+                               class="btn btn-primary">
+                            📋 View Clients
+                        </a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Clients" asp-action="Create"
+                                   class="btn btn-outline-primary">
+                                ➕ Add New Client
+                            </a>
+                        }
+                    </div>
                 </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="card-footer bg-transparent text-center">
+                        <small class="text-muted">
+                            🔑 Admin: Full access
+                        </small>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-footer bg-transparent text-center">
+                        <small class="text-muted">
+                            👁️ View only
+                        </small>
+                    </div>
+                }
             </div>
         </div>
 
+        @* CONTRACTS CARD *@
         <div class="col-md-4">
-            <div class="card border-success shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h1 class="display-4">📄</h1>
-                    <h5 class="card-title">Contracts</h5>
-                    <p class="card-text">
-                        Create and manage legal agreements, SLAs, and signed documents.
+            <div class="card h-100 shadow border-0"
+                 style="border-top: 4px solid #198754 !important;">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3"
+                         style="font-size: 3.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+                        📄
+                    </div>
+                    <h5 class="card-title fw-bold">Contracts</h5>
+                    <p class="card-text text-muted small">
+                        Create and manage legal agreements, SLAs,
+                        and signed documents for all active clients.
                     </p>
-                    <a asp-controller="Contracts" asp-action="Index"
-                       class="btn btn-success">View Contracts</a>
-                    @* Admin and Manager can create contracts *@
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-                    {
-                        <a asp-controller="Contracts" asp-action="Create"
-                           class="btn btn-outline-success ms-2">Add New</a>
-                    }
+                    <div class="d-grid gap-2 mt-3">
+                        <a asp-controller="Contracts" asp-action="Index"
+                               class="btn btn-success">
+                            📋 View Contracts
+                        </a>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                        {
+                            <a asp-controller="Contracts" asp-action="Create"
+                                   class="btn btn-outline-success">
+                                ➕ Add New Contract
+                            </a>
+                        }
+                    </div>
                 </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="card-footer bg-transparent text-center">
+                        <small class="text-muted">
+                            🔑 Admin: Search, filter and manage
+                        </small>
+                    </div>
+                }
+                else if (User.IsInRole("Manager"))
+                {
+                    <div class="card-footer bg-transparent text-center">
+                        <small class="text-muted">
+                            📋 Manager: Create and view
+                        </small>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-footer bg-transparent text-center">
+                        <small class="text-muted">
+                            👁️ View only
+                        </small>
+                    </div>
+                }
             </div>
         </div>
 
+        @* SERVICE REQUESTS CARD *@
         <div class="col-md-4">
-            <div class="card border-warning shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h1 class="display-4">🔧</h1>
-                    <h5 class="card-title">Service Requests</h5>
-                    <p class="card-text">
-                        Raise and track service requests linked to active contracts.
+            <div class="card h-100 shadow border-0"
+                 style="border-top: 4px solid #ffc107 !important;">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3"
+                         style="font-size: 3.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+                        🔧
+                    </div>
+                    <h5 class="card-title fw-bold">Service Requests</h5>
+                    <p class="card-text text-muted small">
+                        Raise and track logistics service requests
+                        linked to active contracts with live USD to ZAR conversion.
                     </p>
-                    <a asp-controller="ServiceRequests" asp-action="Index"
-                       class="btn btn-warning">View Requests</a>
-                    @* Admin and Manager can raise service requests *@
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-                    {
-                        <a asp-controller="ServiceRequests" asp-action="Create"
-                           class="btn btn-outline-warning ms-2">Add New</a>
-                    }
+                    <div class="d-grid gap-2 mt-3">
+                        <a asp-controller="ServiceRequests" asp-action="Index"
+                               class="btn btn-warning">
+                            📋 View Requests
+                        </a>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                        {
+                            <a asp-controller="ServiceRequests" asp-action="Create"
+                                   class="btn btn-outline-warning">
+                                ➕ New Request
+                            </a>
+                        }
+                    </div>
+                </div>
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <div class="card-footer bg-transparent text-center">
+                        <small class="text-muted">
+                            💱 Live USD → ZAR conversion
+                        </small>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-footer bg-transparent text-center">
+                        <small class="text-muted">
+                            👁️ View only
+                        </small>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @* ── HOW IT WORKS SECTION ────────────────────────────────────────────────── *@
+    <div class="card shadow border-0 mb-4">
+        <div class="card-header bg-dark text-white">
+            <strong>📖 How GLMS Works</strong>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 text-center">
+                <div class="col-md-3">
+                    <div class="p-3 rounded"
+                         style="background: rgba(13, 110, 253, 0.1);">
+                        <div style="font-size: 2rem;">1️⃣</div>
+                        <strong>Add a Client</strong>
+                        <p class="small text-muted mb-0 mt-1">
+                            Register a new logistics client with their contact details
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 rounded"
+                         style="background: rgba(25, 135, 84, 0.1);">
+                        <div style="font-size: 2rem;">2️⃣</div>
+                        <strong>Create a Contract</strong>
+                        <p class="small text-muted mb-0 mt-1">
+                            Link the client to a contract with dates and service level
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 rounded"
+                         style="background: rgba(255, 193, 7, 0.1);">
+                        <div style="font-size: 2rem;">3️⃣</div>
+                        <strong>Raise a Request</strong>
+                        <p class="small text-muted mb-0 mt-1">
+                            Create service requests against active contracts in USD
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 rounded"
+                         style="background: rgba(108, 117, 125, 0.1);">
+                        <div style="font-size: 2rem;">4️⃣</div>
+                        <strong>Track & Manage</strong>
+                        <p class="small text-muted mb-0 mt-1">
+                            Monitor status changes with automatic audit logs and notifications
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+}
+else
+{
+    @* ── NOT LOGGED IN — FEATURE OVERVIEW ───────────────────────────────────── *@
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow border-0 text-center p-4">
+                <div style="font-size: 3rem;">📄</div>
+                <h5 class="fw-bold mt-2">Contract Management</h5>
+                <p class="text-muted small">
+                    Centralised storage for all legal agreements and SLAs
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow border-0 text-center p-4">
+                <div style="font-size: 3rem;">💱</div>
+                <h5 class="fw-bold mt-2">Currency Conversion</h5>
+                <p class="text-muted small">
+                    Automatic live USD to ZAR conversion for all service requests
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow border-0 text-center p-4">
+                <div style="font-size: 3rem;">🔔</div>
+                <h5 class="fw-bold mt-2">Automated Notifications</h5>
+                <p class="text-muted small">
+                    Audit logs and email alerts on every contract status change
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-area="Identity" asp-page="/Account/Login"
+               class="btn btn-primary btn-lg me-3">
+            🔐 Login
+        </a>
+        <a asp-area="Identity" asp-page="/Account/Register"
+               class="btn btn-outline-primary btn-lg">
+            📝 Register
+        </a>
     </div>
 }

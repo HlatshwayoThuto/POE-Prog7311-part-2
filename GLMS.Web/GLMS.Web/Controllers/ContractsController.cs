@@ -1,4 +1,5 @@
-﻿// CONTRACTS CONTROLLER 
+﻿// ─────────────────────────────────────────────────────────────────────────────
+// CONTRACTS CONTROLLER
 // Manages all operations for Contracts in the GLMS system.
 //
 // WHAT IS A CONTRACT?
@@ -9,7 +10,7 @@
 // ServiceRequest without a valid Active contract.
 //
 // ROLE-BASED ACCESS:
-// - Admin:   Full access — search/filter, create, update status
+// - Admin:   Full access — search/filter, create, update status, delete
 // - Manager: Can create contracts and download agreements
 // - Viewer:  Read-only — can view details and download agreements only
 //
@@ -23,6 +24,8 @@
 // - PDF file upload and download
 // - Status workflow management
 // - Observer notifications on status change
+// - Delete contracts (Admin only) — required before deleting a client
+// ─────────────────────────────────────────────────────────────────────────────
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,23 +37,28 @@ using GLMS.Web.Services;
 
 namespace GLMS.Web.Controllers
 {
-    [Authorize] // All actions require login
+    // [Authorize] means every single action in this controller
+    // requires the user to be logged in
+    // If not logged in they get redirected to the Login page automatically
+    [Authorize]
     public class ContractsController : Controller
     {
-        // IContractService wraps the repository AND handles Observer notifications
-        // When a status changes, it automatically notifies AuditLog and Email observers
+        // IContractService handles contract data AND Observer notifications
+        // When a status changes it automatically notifies AuditLog and Email observers
         private readonly IContractService _contractService;
 
         // Used only to populate the Client dropdown on the Create form
         private readonly IClientRepository _clientRepo;
 
-        // Factory Pattern — creates Contract objects with correct business rules applied
+        // Factory Pattern — creates Contract objects with correct business rules
+        // Standard = Draft, Premium/Enterprise = Active
         private readonly IContractFactory _factory;
 
         // Handles PDF validation and saving to the server file system
         private readonly IFileService _fileService;
 
-        // All dependencies injected via constructor — registered in Program.cs
+        // All four dependencies are provided automatically by ASP.NET Core
+        // because we registered them all in Program.cs
         public ContractsController(
             IContractService contractService,
             IClientRepository clientRepo,
@@ -63,124 +71,113 @@ namespace GLMS.Web.Controllers
             _fileService = fileService;
         }
 
-        // INDEX — Search and Filter Contracts 
-        // GET: /Contracts or /Contracts?startDate=2026-01-01&status=Active
+        // ── INDEX — SEARCH AND FILTER CONTRACTS ──────────────────────────────
+        // GET: /Contracts
+        // GET: /Contracts?startDate=2026-01-01&status=Active
         //
-        // ADMIN ONLY — this is the key requirement from the assignment brief:
-        // "Implement a Search/Filter mechanism using LINQ to allow Admins to
-        // find contracts by Date Range and Status"
-        //
-        // The three optional parameters come from the search form query string
-        // If no filters are provided, ALL contracts are returned
-        [Authorize(Roles = "Admin")]
+        // ADMIN ONLY — the assignment specifically says Admins use search/filter
+        // The three parameters are OPTIONAL — they come from the search form
+        // If the user just goes to /Contracts all three are null
+        // and ALL contracts are returned (no filter applied)
+        [Authorize(Roles = "Admin,Manager, Viewer")]
         public async Task<IActionResult> Index(
             DateTime? startDate, DateTime? endDate, ContractStatus? status)
         {
             // Store the filter values in ViewBag so the search form
-            // can repopulate itself with the user's last search terms
+            // can show what the user last searched for
             ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
             ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
             ViewBag.Status = status;
 
             // SearchAsync uses LINQ to filter contracts
-            // Passing null for a parameter means "don't filter by this"
-            // So calling SearchAsync(null, null, null) returns ALL contracts
+            // If all three parameters are null it returns ALL contracts
             var contracts = await _contractService.SearchAsync(startDate, endDate, status);
             return View(contracts);
         }
 
-        // DETAILS — View a Single Contract 
+        // ── DETAILS — VIEW ONE CONTRACT ───────────────────────────────────────
         // GET: /Contracts/Details/5
-        //
-        // All roles can view contract details
-        // The Details view shows the contract info, service requests,
-        // and the status update form (only visible to Admins in the view)
+        // All three roles can view contract details
         [Authorize(Roles = "Admin,Manager,Viewer")]
         public async Task<IActionResult> Details(int id)
         {
-            // GetByIdAsync includes related Client and ServiceRequests
-            // so we can display them all on the Details page
+            // GetByIdAsync loads the contract WITH its Client AND ServiceRequests
             var contract = await _contractService.GetByIdAsync(id);
-
-            // Return 404 if contract ID doesn't exist
             if (contract == null) return NotFound();
             return View(contract);
         }
 
-        // ── CREATE (GET) — Show the Create Form 
+        // ── CREATE GET — SHOW THE CREATE FORM ────────────────────────────────
         // GET: /Contracts/Create
-        // Admin and Manager can create new contracts
+        // Admin and Manager can create contracts
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create()
         {
-            // Populate the Client dropdown so user can select which client
-            // this contract belongs to
+            // Populate the Client dropdown before showing the form
             await PopulateClientsDropDown();
             return View();
         }
 
-        // CREATE (POST) — Save the New Contract 
+        // ── CREATE POST — SAVE THE NEW CONTRACT ──────────────────────────────
         // POST: /Contracts/Create
-        // enctype="multipart/form-data" in the view allows file uploads
+        // "IFormFile? signedAgreement" = the optional uploaded PDF file
         [HttpPost, ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create(Contract vm, IFormFile? signedAgreement)
         {
-            // Validate all required fields before proceeding
+            // Check all required fields are filled in correctly
             if (!ModelState.IsValid)
             {
                 await PopulateClientsDropDown();
                 return View(vm);
             }
 
-            // Factory Pattern 
-            // Instead of "new Contract { ... }" we use the Factory
-            // The Factory applies business rules:
-            // - Standard ServiceLevel → Status starts as Draft
-            // - Premium/Enterprise ServiceLevel → Status starts as Active
-            // This keeps business logic out of the controller
+            // FACTORY PATTERN
+            // Ask the factory to create the contract object
+            // The factory applies the business rule:
+            // Standard = starts as Draft, Premium/Enterprise = starts as Active
             var contract = _factory.CreateContract(
                 vm.ClientId, vm.Title, vm.StartDate, vm.EndDate, vm.ServiceLevel);
 
-            // ── File Handling 
-            // Check if the user uploaded a signed agreement PDF
+            // FILE HANDLING
+            // If the user uploaded a PDF save it to the server
             if (signedAgreement != null && signedAgreement.Length > 0)
             {
                 try
                 {
-                    // FileService validates it's a PDF and saves it to the server
-                    // Returns the server path and original filename
-                    var (path, name) = await _fileService.SaveContractFileAsync(signedAgreement);
+                    // FileService validates it is a PDF and saves it to disk
+                    // Returns the server path and the original filename
+                    var (path, name) = await _fileService
+                        .SaveContractFileAsync(signedAgreement);
 
-                    // Store the path in the database so we can retrieve it later
+                    // Save the server path in the database
                     contract.SignedAgreementPath = path;
-                    // Store original name so the download has a meaningful filename
+
+                    // Save the original name so downloads look proper
                     contract.SignedAgreementOriginalName = name;
                 }
                 catch (InvalidOperationException ex)
                 {
-                    // FileService threw because the file was not a PDF
-                    // Add the error to ModelState so it shows in the view
+                    // File was not a PDF — show the error message in the form
                     ModelState.AddModelError("SignedAgreement", ex.Message);
                     await PopulateClientsDropDown();
                     return View(vm);
                 }
             }
 
-            // Save the new contract to the database via the service
+            // Save the contract to the database
             await _contractService.CreateAsync(contract);
             TempData["Success"] = "Contract created successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        // UPDATE STATUS — Change a Contract's Status 
+        // ── UPDATE STATUS — CHANGE CONTRACT STATUS ────────────────────────────
         // POST: /Contracts/UpdateStatus
         //
-        // ADMIN ONLY — only Admins can change contract statuses
-        //
-        // This is the main action that triggers the Observer Pattern:
-        // UpdateStatusAsync() in ContractService saves the new status AND automatically notifies all registered observers:
-        // 1. AuditLogObserver — logs the change
+        // ADMIN ONLY
+        // This triggers the OBSERVER PATTERN:
+        // UpdateStatusAsync() saves the new status AND automatically notifies:
+        // 1. AuditLogObserver — writes a log entry
         // 2. EmailNotificationObserver — simulates sending an email
         [HttpPost, ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -188,58 +185,98 @@ namespace GLMS.Web.Controllers
         {
             try
             {
-                // This single call does THREE things:
-                // 1. Finds the contract in the database
+                // One method call that does everything:
+                // 1. Finds the contract
                 // 2. Updates the status
-                // 3. Notifies all observers of the change
+                // 3. Saves to database
+                // 4. Notifies all observers
                 await _contractService.UpdateStatusAsync(id, newStatus);
                 TempData["Success"] = $"Contract status updated to {newStatus}.";
             }
             catch (KeyNotFoundException)
             {
-                // Contract ID not found in the database
                 return NotFound();
             }
 
-            // Redirect back to the same contract's Details page
+            // Go back to the same contract's Details page
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        // DOWNLOAD AGREEMENT — Stream PDF to Browser 
+        // ── DOWNLOAD AGREEMENT — STREAM PDF TO BROWSER ────────────────────────
+        // GET: /Contracts/DownloadAgreement/5
         // All roles can download signed agreements
-        // Reads the file from the server disk and streams it to the browser
-        // The browser will prompt the user to open or save the PDF
         [Authorize(Roles = "Admin,Manager,Viewer")]
         public async Task<IActionResult> DownloadAgreement(int id)
         {
             var contract = await _contractService.GetByIdAsync(id);
 
-            // Check that the contract exists AND has a file attached
+            // Check the contract exists and has a file attached
             if (contract == null || contract.SignedAgreementPath == null)
                 return NotFound();
 
             // Check the file still physically exists on the server disk
-            // It could have been manually deleted from the file system
             if (!System.IO.File.Exists(contract.SignedAgreementPath))
                 return NotFound("The file no longer exists on the server.");
 
-            // Read the file bytes from disk asynchronously
-            var bytes = await System.IO.File.ReadAllBytesAsync(contract.SignedAgreementPath);
+            // Read the file bytes from disk
+            var bytes = await System.IO.File.ReadAllBytesAsync(
+                contract.SignedAgreementPath);
 
-            // Return the file as a downloadable PDF
-            // "application/pdf" tells the browser what type of file it is
-            // The original filename is used so the download has a meaningful name
+            // Stream the file to the browser as a downloadable PDF
             return File(bytes, "application/pdf",
                 contract.SignedAgreementOriginalName ?? "agreement.pdf");
         }
 
-        // PRIVATE HELPER — Populate Clients Dropdown 
-        // Fetches all clients from the database and converts them to a SelectList
+        // ── DELETE GET — SHOW CONFIRMATION PAGE ──────────────────────────────
+        // GET: /Contracts/Delete/5
+        // Shows the contract details with a warning before deleting
+        // ADMIN ONLY — only Admins can delete contracts
+        // This is needed so Admins can clear contracts before deleting a client
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            // Find the contract including its client and service requests
+            // We need all this information to show on the confirmation page
+            var contract = await _contractService.GetByIdAsync(id);
+
+            // If the contract does not exist return 404
+            if (contract == null) return NotFound();
+
+            // Show the confirmation page with full contract details
+            return View(contract);
+        }
+
+        // ── DELETE POST — ACTUALLY DELETE THE CONTRACT ────────────────────────
+        // POST: /Contracts/Delete/5
+        //
+        // Runs when the Admin confirms they want to delete
+        // NOTE: Because of CASCADE DELETE in GlmsDbContext
+        // all ServiceRequests linked to this contract are
+        // automatically deleted at the same time
+        // So the Admin does not need to delete service requests manually
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            // Delete the contract from the database
+            // All linked ServiceRequests are deleted automatically
+            // because of DeleteBehavior.Cascade in GlmsDbContext
+            await _contractService.DeleteAsync(id);
+            TempData["Success"] = "Contract deleted successfully.";
+
+            // Go back to the contracts list
+            return RedirectToAction(nameof(Index));
+        }
+
+        // ── PRIVATE HELPER — POPULATE CLIENT DROPDOWN ────────────────────────
+        // Used by the Create form to show a list of clients to choose from
+        // "private" means only this controller can call this method
         private async Task PopulateClientsDropDown(int? selectedId = null)
         {
             var clients = await _clientRepo.GetAllAsync();
 
-            // "Id" = the value stored when selected
+            // SelectList converts clients into a format HTML dropdowns understand
+            // "Id" = the value stored when an option is selected
             // "Name" = the text displayed in the dropdown
             ViewBag.Clients = new SelectList(clients, "Id", "Name", selectedId);
         }

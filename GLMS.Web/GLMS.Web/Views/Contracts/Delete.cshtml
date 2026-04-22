@@ -1,0 +1,54 @@
+﻿@model GLMS.Web.Models.Contract
+@using GLMS.Web.Models
+@{
+    ViewData["Title"] = "Delete Contract";
+}
+
+<h2>🗑️ Delete Contract</h2>
+<hr />
+
+<div class="alert alert-danger">
+    <strong>⚠️ Are you sure you want to delete this contract?</strong>
+    <br />
+    <small>
+        This action cannot be undone.
+        All service requests linked to this contract will also be deleted.
+    </small>
+</div>
+
+<div class="card shadow-sm col-md-6">
+    <div class="card-header bg-dark text-white">Contract Details</div>
+    <div class="card-body">
+        <p><strong>Title:</strong> @Model.Title</p>
+        <p><strong>Client:</strong> @Model.Client?.Name</p>
+        <p><strong>Start Date:</strong> @Model.StartDate.ToString("dd MMM yyyy")</p>
+        <p><strong>End Date:</strong> @Model.EndDate.ToString("dd MMM yyyy")</p>
+        <p>
+            <strong>Status:</strong>
+            <span class="badge @(Model.Status == ContractStatus.Active ? "bg-success" :
+                                                                   Model.Status == ContractStatus.Expired ? "bg-danger" :
+                                                                   Model.Status == ContractStatus.OnHold ? "bg-warning text-dark" :
+                                                                   "bg-secondary")">
+                @Model.Status
+            </span>
+        </p>
+        <p><strong>Service Level:</strong> @Model.ServiceLevel</p>
+
+        @if (Model.ServiceRequests.Any())
+        {
+            <div class="alert alert-warning mt-2">
+                <strong>⚠️ This contract has @Model.ServiceRequests.Count() service request(s).</strong>
+                <br />
+                <small>They will all be automatically deleted when this contract is deleted.</small>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-4">
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Yes, Delete Contract</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
